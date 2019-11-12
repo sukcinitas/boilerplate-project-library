@@ -32,8 +32,6 @@ module.exports = function (app) {
       } catch (err) {
         console.log(err);
       }
-      //response will be array of book objects
-      //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
     })
     
     .post(async function (req, res){
@@ -44,12 +42,10 @@ module.exports = function (app) {
           return;
         }
         var result = await db.collection("books").insertOne({title: title, comments: []});
-        console.log("Success in inserting a book into database");
         res.json(result.ops[0]);
       } catch (err){
         console.log(err);
       }
-      //response will contain new book object including atleast _id and title
     })
     
     .delete(async function(req, res){
@@ -59,22 +55,17 @@ module.exports = function (app) {
       } catch (err) {
         console.log(err);
       }
-      //if successful response will be 'complete delete successful'
     });
-
-
 
   app.route('/api/books/:id')
     .get(async function (req, res){
       var bookid = req.params.id;
       try {
         var result = await db.collection("books").findOne({_id: ObjectId(bookid)}, {_id:1, title:1, comments:1});
-        console.log("Successful retrieval of certain book");
         res.send(result);
       } catch (err) {
         res.send("no such book found")
       }
-      //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
     })
     
     .post(async function(req, res){
@@ -86,7 +77,6 @@ module.exports = function (app) {
       } catch (err) {
         console.log(err);
       }
-      //json res format same as .get
     })
     
     .delete(async function(req, res){
@@ -97,7 +87,6 @@ module.exports = function (app) {
       } catch (err) {
         console.log(err);
       }
-      //if successful response will be 'delete successful'
     });
   
 };
